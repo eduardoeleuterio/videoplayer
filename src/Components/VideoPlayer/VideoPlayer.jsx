@@ -1,22 +1,16 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 function VideoPlayer() {
   const [videoUrl, setVideoUrl] = useState('');
-  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Extraia o ID do vídeo do URL, se houver
+    // Extraia o ID do vídeo do URL
     const videoId = videoUrl.split('v=')[1];
-    // Verifique se um ID de vídeo foi encontrado
-    if (videoId) {
-      // Defina a nova rota com o ID do vídeo como parâmetro
-      navigate(`/video?id=${videoId}`);
-    } else {
-      // Exiba uma mensagem de erro ou faça qualquer outra ação apropriada
-      console.log('Link de vídeo inválido.');
-    }
+    // Defina o URL de incorporação do vídeo
+    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    // Atualize o estado do componente com o URL de incorporação
+    setVideoUrl(embedUrl);
   };
 
   return (
@@ -30,8 +24,23 @@ function VideoPlayer() {
         />
         <button type="submit">Abrir vídeo</button>
       </form>
+      {videoUrl && (
+        <div>
+          <iframe
+            width="560"
+            height="315"
+            src={videoUrl}
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      )}
     </div>
   );
 }
+
+
 
 export default VideoPlayer;
